@@ -1,5 +1,4 @@
-import { StatusBar } from 'expo-status-bar'
-import { Box, Center, Text, VStack, useColorModeValue } from 'native-base'
+import { Center, VStack } from 'native-base'
 import React, { useCallback } from 'react'
 
 import { TaskItem } from '../components/task-item'
@@ -7,6 +6,8 @@ import ThemeToggle from '../components/theme-toggle'
 
 export default function Main() {
   const [checked, setChecked] = React.useState(true)
+  const [subject, setSubject] = React.useState('')
+  const [isEditing, setIsEditing] = React.useState(false)
   const handlePressCheckbox = useCallback(() => {
     setChecked(prev => !prev)
   }, [checked])
@@ -17,17 +18,19 @@ export default function Main() {
       _dark={{ bg: 'blueGray.900' }}
       _light={{ bg: 'blueGray.50' }}
     >
-      <VStack space={5} alignItems={'center'}>
-        <Box bg={useColorModeValue('red.500', 'yellow.500')}>
-          <Text>Box 1</Text>
-        </Box>
+      <VStack space={5} alignItems={'center'} w="full">
+        <TaskItem
+          isEditing={isEditing}
+          isDone={checked}
+          onToggleCheckbox={handlePressCheckbox}
+          subject={subject}
+          onPressLabel={() => setIsEditing(true)}
+          onChangeSubject={setSubject}
+          onFinishedEditing={() => setIsEditing(false)}
+        />
+
+        <ThemeToggle />
       </VStack>
-      <Text>Open up App.tsx to start working on your app!</Text>
-      <Box w={100} h={100}>
-        <TaskItem isDone={checked} onToggleCheckbox={handlePressCheckbox} />
-      </Box>
-      <ThemeToggle />
-      <StatusBar style="auto" />
     </Center>
   )
 }
